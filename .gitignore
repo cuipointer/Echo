@@ -1,5 +1,4 @@
-# Logs
-logs/
+# Logs: 忽略运行时 .log 文件,但保留结构化工作日志(daily/weekly/debug/templates)
 *.log
 npm-debug.log*
 
