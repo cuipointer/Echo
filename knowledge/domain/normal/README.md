@@ -109,8 +109,8 @@
 - [矩阵表](../../matrix/matrix-table.md)
 
 ### 工具
-- [架构一致性检查](../../tools/check-architecture-consistency.py)
-- [SOP编写标准](../../docs/sop-writing-standard.md)
+- [架构一致性检查](../../../tools/check-architecture-consistency.py)
+- [SOP编写标准](../../../docs/sop-writing-standard.md)
 
 ## 更新记录
 

@@ -7,7 +7,7 @@ argument-hint: <干扰源> <受扰体>
 
 用户输入:`$ARGUMENTS`
 
-查询 [knowledge/matrix/](knowledge/matrix/) 下的核心矩阵表,返回对应 SOP 编号。
+查询 [knowledge/matrix/](../../knowledge/matrix/) 下的核心矩阵表,返回对应 SOP 编号。
 
 ## 1. 解析参数
 
