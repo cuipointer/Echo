@@ -1,0 +1,45 @@
+name: Validate
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Check directory structure
+      run: |
+        echo "Checking directory structure..."
+        test -d .claude || exit 1
+        test -d .claude/agents || exit 1
+        test -d .claude/commands || exit 1
+        test -d .claude/skills || exit 1
+        test -d knowledge || exit 1
+        test -d tools || exit 1
+        test -f CLAUDE.md || exit 1
+        echo "Directory structure is valid."
+
+    - name: Validate SOP templates
+      run: |
+        echo "Validating SOP templates..."
+        test -f knowledge/sops/_template.md || exit 1
+        echo "SOP template exists."
+
+    - name: Validate knowledge base
+      run: |
+        echo "Validating knowledge base..."
+        test -f knowledge/methodology/three-elements.md || exit 1
+        test -f knowledge/matrix/matrix-table.md || exit 1
+        test -f knowledge/decision-tree.md || exit 1
+        echo "Knowledge base is valid."
