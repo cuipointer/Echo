@@ -1,0 +1,353 @@
+# Desense 核心矩阵 — 结构化数据源
+#
+# 本文件是 干扰源 × 受扰体 → SOP 映射的唯一真相源。
+# knowledge/matrix/{matrix-table,source-list,victim-list}.md 由 tools/gen_matrix_views.py
+# 从本文件自动生成,手动修改 .md 会在下次生成时被覆盖。
+#
+# 修改流程: 改 matrix.yaml → 跑 python3 tools/gen_matrix_views.py → commit 二者
+#
+version: "2.0.0"
+updated: "2026-04-27"
+changelog:
+  - version: "2.0.0"
+    date: "2026-04-27"
+    notes: "从 matrix-table.md v1.1.0 结构化,统一命名,消除 source-list/victim-list 漂移"
+  - version: "1.1.0"
+    date: "2026-04-22"
+    notes: "新增 Normal 场景列,增加 NORMAL SOP 系列"
+  - version: "1.0.0"
+    date: "2026-04-21"
+    notes: "初始版本,完成 P0 高频 SOP 编写"
+
+# =========================================================================
+# 干扰源 (Sources)
+# =========================================================================
+# key: 内部标识符(ASCII, 便于程序引用)
+# label: 人类可读名称(中文)
+# code: 2 字母代码(SOP 编号 {受扰体}-{源}-{序号} 中的 {源})
+# category: 归类(电源/时钟/射频/显示/存储/摄像/振动/音频/充电/外设)
+# base_freq_range: 基频范围
+# noise_source: 噪声来源描述
+# typical_interference: 典型干扰特征
+# normal_impact: 对 Normal 基准的影响(若适用)
+# priority: 排查优先级(极高/高/中/低)
+sources:
+  PMIC:
+    label: "系统电源 (PMIC)"
+    code: PM
+    category: 电源
+    base_freq_range: "1-4 MHz"
+    noise_source: "DCDC 开关频率及纹波"
+    typical_interference: "高次谐波命中各频段,宽带噪声"
+    normal_impact: "系统级噪声,影响所有频段"
+    priority: 高
+
+  OSC:
+    label: "系统时钟 (OSC)"
+    code: OS
+    category: 时钟
+    base_freq_range: "26-48 MHz"
+    noise_source: "主时钟/晶振谐波"
+    typical_interference: "整数倍谐波命中特定频段"
+    normal_impact: "离散谱线干扰"
+    priority: 高
+
+  RF_POWER:
+    label: "射频电源"
+    code: RP
+    category: 电源
+    base_freq_range: "500 kHz - 2 MHz"
+    noise_source: "PA 供电电源开关噪声"
+    typical_interference: "传导到射频电路"
+    normal_impact: "射频性能基础噪声"
+    priority: 中
+
+  NONLINEAR:
+    label: "非线性器件"
+    code: NL
+    category: 射频
+    base_freq_range: "无固定基频"
+    noise_source: "二极管/TVS/ESD 非线性"
+    typical_interference: "交调产物落入接收频段"
+    normal_impact: "大小功率差异明显"
+    priority: 中
+
+  PA_MATCH:
+    label: "PA 匹配"
+    code: PA
+    category: 射频
+    base_freq_range: "无固定基频"
+    noise_source: "阻抗失配导致反射"
+    typical_interference: "二次辐射干扰"
+    normal_impact: "天线效率降低"
+    priority: 中
+
+  ANTENNA_TUNER:
+    label: "天线 Tuner"
+    code: AT
+    category: 射频
+    base_freq_range: "时钟频率"
+    noise_source: "控制信号及电源噪声"
+    typical_interference: "时钟谐波干扰"
+    normal_impact: "天线调谐噪声"
+    priority: 中
+
+  SHIELD_LEAK:
+    label: "屏蔽泄露"
+    code: SL
+    category: 射频
+    base_freq_range: "宽带"
+    noise_source: "屏蔽不良导致泄露"
+    typical_interference: "内部噪声辐射"
+    normal_impact: "系统性辐射问题"
+    priority: 中
+
+  BAD_CONNECTION:
+    label: "电连接不良"
+    code: BC
+    category: 射频
+    base_freq_range: "无固定基频"
+    noise_source: "接触非线性产生 PIM"
+    typical_interference: "交调干扰"
+    normal_impact: "稳定性问题"
+    priority: 低
+
+  LCD_MIPI:
+    label: "LCD MIPI"
+    code: LC
+    category: 显示
+    base_freq_range: "60-120 MHz"
+    noise_source: "DSI Clock / Data 线开关噪声"
+    typical_interference: "谐波命中各频段(20-40 次谐波)"
+    normal_impact: null
+    priority: 高
+
+  CAMERA_MIPI:
+    label: "Camera MIPI"
+    code: CA
+    category: 摄像
+    base_freq_range: "200-800 MHz"
+    noise_source: "CSI Clock / Data 线噪声"
+    typical_interference: "直接命中或低次谐波"
+    normal_impact: null
+    priority: 高
+
+  DDR:
+    label: "DDR"
+    code: DD
+    category: 存储
+    base_freq_range: "200-933 MHz"
+    noise_source: "内存时钟及数据线噪声"
+    typical_interference: "宽带噪声覆盖多个频段"
+    normal_impact: null
+    priority: 高
+
+  VIB_MOTOR:
+    label: "VIB Motor"
+    code: VB
+    category: 振动
+    base_freq_range: "20-50 kHz"
+    noise_source: "PWM 驱动信号及电机噪声"
+    typical_interference: "超高次谐波命中 GNSS 频段"
+    normal_impact: null
+    priority: 中
+
+  SPEAKER_PA:
+    label: "Speaker PA"
+    code: SP
+    category: 音频
+    base_freq_range: "300-600 kHz"
+    noise_source: "Class-D 放大器开关频率"
+    typical_interference: "高次谐波干扰"
+    normal_impact: null
+    priority: 中
+
+  CHARGER:
+    label: "Charger"
+    code: CH
+    category: 充电
+    base_freq_range: "500 kHz - 2 MHz"
+    noise_source: "Buck/Boost 开关频率"
+    typical_interference: "充电时电源噪声增大"
+    normal_impact: null
+    priority: 高
+
+  USB3:
+    label: "USB 3.0"
+    code: U3
+    category: 外设
+    base_freq_range: "2.5 GHz / 5 GHz"
+    noise_source: "SuperSpeed 5 Gbps 信号"
+    typical_interference: "直接命中高频段"
+    normal_impact: null
+    priority: 高
+
+# =========================================================================
+# 受扰体 (Victims)
+# =========================================================================
+victims:
+  NORMAL:
+    label: "Normal"
+    code: NORMAL
+    is_baseline: true
+    description: "基准场景,所有排查前置条件"
+    priority: 极高
+
+  W24:
+    label: "WiFi 2.4G"
+    code: W24
+    freq_range_mhz: [2412, 2484]
+    sensitivity_dbm: [-82, -90]
+    priority: 高
+    notes: "频段窄,易受邻频干扰"
+
+  W5:
+    label: "WiFi 5G"
+    code: W5
+    freq_range_mhz: [5150, 5850]
+    sensitivity_dbm: [-76, -84]
+    priority: 高
+    notes: "频段宽,易受宽带干扰"
+
+  LLB:
+    label: "LTE LB"
+    code: LLB
+    freq_range_mhz: [700, 960]
+    sensitivity_dbm: [-94, -102]
+    priority: 高
+    notes: "穿透力强,易受低频干扰"
+
+  LHB:
+    label: "LTE HB"
+    code: LHB
+    freq_range_mhz: [2300, 3700]
+    sensitivity_dbm: [-94, -102]
+    priority: 中
+    notes: "带宽大,易受高频干扰"
+
+  GL1:
+    label: "GNSS L1"
+    code: GL1
+    freq_range_mhz: [1561, 1606]
+    sensitivity_dbm: [-140, -150]
+    priority: 极高
+    notes: "灵敏度极高,微弱干扰即影响性能"
+
+  GL5:
+    label: "GNSS L5"
+    code: GL5
+    freq_range_mhz: [1176, 1176]
+    sensitivity_dbm: [-140, -150]
+    priority: 高
+    notes: "新频段,干扰场景较少"
+
+# =========================================================================
+# 映射 (源 × 受扰体 → SOP)
+# =========================================================================
+# 每条映射对应矩阵表中的一个单元格(非 `—` 单元格)
+# tier: P0 (高频,必备 SOP) / P1 (中频,应编写) / P2 (低频,按需)
+# typical_degradation: 典型恶化量(dB 范围)
+# mechanism: 干扰机制简述
+# diagnosis_hint: 快速诊断提示(场景或操作)
+# high_priority: 是否矩阵表中加粗的高频组合
+mappings:
+  # Normal 场景(所有电源/时钟/射频源 × NORMAL)
+  - { source: PMIC,          victim: NORMAL, sop: NORMAL-01, tier: P0, high_priority: true,  typical_degradation: "3-10 dB", mechanism: "电源开关噪声传导",     diagnosis_hint: "电源管理测试" }
+  - { source: OSC,           victim: NORMAL, sop: NORMAL-02, tier: P0, high_priority: true,  typical_degradation: "3-8 dB",  mechanism: "时钟谐波辐射",         diagnosis_hint: "频率调整测试" }
+  - { source: RF_POWER,      victim: NORMAL, sop: NORMAL-03, tier: P1, high_priority: false, typical_degradation: "2-8 dB",  mechanism: "PA 电源传导",          diagnosis_hint: "PA 负载切换测试" }
+  - { source: NONLINEAR,     victim: NORMAL, sop: NORMAL-04, tier: P1, high_priority: false, typical_degradation: "2-10 dB", mechanism: "交调产物",             diagnosis_hint: "大小功率差异测试" }
+  - { source: PA_MATCH,      victim: NORMAL, sop: NORMAL-05, tier: P2, high_priority: false, typical_degradation: "1-5 dB",  mechanism: "阻抗失配反射",         diagnosis_hint: "驻波测量" }
+  - { source: ANTENNA_TUNER, victim: NORMAL, sop: NORMAL-06, tier: P2, high_priority: false, typical_degradation: "1-5 dB",  mechanism: "Tuner 控制信号噪声",   diagnosis_hint: "Tuner 状态切换" }
+  - { source: SHIELD_LEAK,   victim: NORMAL, sop: NORMAL-07, tier: P2, high_priority: false, typical_degradation: "3-10 dB", mechanism: "屏蔽泄露辐射",         diagnosis_hint: "近场扫描" }
+  - { source: BAD_CONNECTION,victim: NORMAL, sop: NORMAL-08, tier: P2, high_priority: false, typical_degradation: "1-8 dB",  mechanism: "接触非线性 PIM",       diagnosis_hint: "连接质量检查" }
+
+  # PMIC 行
+  - { source: PMIC, victim: W24,  sop: W24-04, tier: P1, high_priority: false, typical_degradation: "3-8 dB",  mechanism: "电源共模传导",  diagnosis_hint: "负载变化测试" }
+  - { source: PMIC, victim: LLB,  sop: LLB-04, tier: P0, high_priority: true,  typical_degradation: "5-15 dB", mechanism: "电源传导耦合",  diagnosis_hint: "负载变化测试" }
+  - { source: PMIC, victim: GL1,  sop: GL1-04, tier: P1, high_priority: false, typical_degradation: "3-10 dB", mechanism: "电源高次谐波", diagnosis_hint: "GPS 冷启动测试" }
+  - { source: PMIC, victim: GL5,  sop: GL5-04, tier: P1, high_priority: false, typical_degradation: "3-10 dB", mechanism: "电源谐波",      diagnosis_hint: "GPS L5 灵敏度测试" }
+
+  # OSC 行(系统时钟谐波命中各频段;与 LCD MIPI 行 SOP 重叠是矩阵已知结构)
+  - { source: OSC, victim: W24, sop: W24-01, tier: P0, high_priority: true,  typical_degradation: "3-10 dB", mechanism: "时钟谐波辐射",  diagnosis_hint: "时钟切换测试" }
+  - { source: OSC, victim: W5,  sop: W5-01,  tier: P1, high_priority: false, typical_degradation: "2-8 dB",  mechanism: "时钟高次谐波",  diagnosis_hint: "时钟切换测试" }
+  - { source: OSC, victim: LLB, sop: LLB-01, tier: P1, high_priority: false, typical_degradation: "3-8 dB",  mechanism: "时钟谐波",      diagnosis_hint: "时钟切换测试" }
+  - { source: OSC, victim: LHB, sop: LHB-01, tier: P1, high_priority: false, typical_degradation: "3-8 dB",  mechanism: "时钟谐波",      diagnosis_hint: "时钟切换测试" }
+  - { source: OSC, victim: GL1, sop: GL1-01, tier: P0, high_priority: true,  typical_degradation: "5-15 dB", mechanism: "时钟谐波辐射",  diagnosis_hint: "GPS 灵敏度测试" }
+  - { source: OSC, victim: GL5, sop: GL5-01, tier: P1, high_priority: false, typical_degradation: "3-10 dB", mechanism: "时钟谐波",      diagnosis_hint: "GPS L5 测试" }
+
+  # LCD MIPI 行
+  - { source: LCD_MIPI, victim: W24, sop: W24-01, tier: P0, high_priority: true,  typical_degradation: "3-10 dB", mechanism: "MIPI 谐波辐射耦合", diagnosis_hint: "灭屏测试" }
+  - { source: LCD_MIPI, victim: W5,  sop: W5-01,  tier: P1, high_priority: false, typical_degradation: "2-8 dB",  mechanism: "MIPI 谐波辐射",     diagnosis_hint: "灭屏测试" }
+  - { source: LCD_MIPI, victim: LLB, sop: LLB-01, tier: P1, high_priority: false, typical_degradation: "3-8 dB",  mechanism: "MIPI 谐波",         diagnosis_hint: "灭屏测试" }
+  - { source: LCD_MIPI, victim: LHB, sop: LHB-01, tier: P1, high_priority: false, typical_degradation: "3-8 dB",  mechanism: "MIPI 谐波",         diagnosis_hint: "灭屏测试" }
+  - { source: LCD_MIPI, victim: GL1, sop: GL1-01, tier: P0, high_priority: true,  typical_degradation: "5-15 dB", mechanism: "MIPI 谐波辐射耦合", diagnosis_hint: "灭屏测试" }
+  - { source: LCD_MIPI, victim: GL5, sop: GL5-01, tier: P1, high_priority: false, typical_degradation: "3-10 dB", mechanism: "MIPI 谐波",         diagnosis_hint: "灭屏测试" }
+
+  # Camera MIPI 行
+  - { source: CAMERA_MIPI, victim: W24, sop: W24-02, tier: P1, high_priority: false, typical_degradation: "3-8 dB",  mechanism: "MIPI 谐波辐射", diagnosis_hint: "关闭相机 APP" }
+  - { source: CAMERA_MIPI, victim: W5,  sop: W5-02,  tier: P1, high_priority: false, typical_degradation: "2-6 dB",  mechanism: "MIPI 谐波",     diagnosis_hint: "关闭相机" }
+  - { source: CAMERA_MIPI, victim: LLB, sop: LLB-02, tier: P1, high_priority: false, typical_degradation: "2-8 dB",  mechanism: "MIPI 谐波",     diagnosis_hint: "关闭相机" }
+  - { source: CAMERA_MIPI, victim: LHB, sop: LHB-02, tier: P1, high_priority: false, typical_degradation: "3-8 dB",  mechanism: "MIPI 谐波",     diagnosis_hint: "关闭相机" }
+  - { source: CAMERA_MIPI, victim: GL1, sop: GL1-02, tier: P1, high_priority: false, typical_degradation: "5-10 dB", mechanism: "MIPI 谐波辐射", diagnosis_hint: "关闭相机 APP" }
+  - { source: CAMERA_MIPI, victim: GL5, sop: GL5-02, tier: P1, high_priority: false, typical_degradation: "3-8 dB",  mechanism: "MIPI 谐波",     diagnosis_hint: "关闭相机" }
+
+  # DDR 行
+  - { source: DDR, victim: W24, sop: W24-03, tier: P1, high_priority: false, typical_degradation: "3-8 dB",  mechanism: "时钟谐波辐射",   diagnosis_hint: "停止下载" }
+  - { source: DDR, victim: W5,  sop: W5-03,  tier: P1, high_priority: false, typical_degradation: "2-6 dB",  mechanism: "时钟谐波",       diagnosis_hint: "停止负载" }
+  - { source: DDR, victim: LLB, sop: LLB-03, tier: P1, high_priority: false, typical_degradation: "2-6 dB",  mechanism: "时钟谐波",       diagnosis_hint: "停止负载" }
+  - { source: DDR, victim: LHB, sop: LHB-03, tier: P1, high_priority: false, typical_degradation: "3-8 dB",  mechanism: "时钟谐波",       diagnosis_hint: "停止负载" }
+  - { source: DDR, victim: GL1, sop: GL1-03, tier: P1, high_priority: false, typical_degradation: "3-8 dB",  mechanism: "时钟谐波",       diagnosis_hint: "停止负载" }
+  - { source: DDR, victim: GL5, sop: GL5-03, tier: P1, high_priority: false, typical_degradation: "2-6 dB",  mechanism: "时钟谐波",       diagnosis_hint: "停止负载" }
+
+  # VIB Motor 行
+  - { source: VIB_MOTOR, victim: LLB, sop: LLB-05, tier: P1, high_priority: false, typical_degradation: "3-8 dB",   mechanism: "PWM 谐波",        diagnosis_hint: "振动开关测试" }
+  - { source: VIB_MOTOR, victim: GL1, sop: GL1-05, tier: P0, high_priority: true,  typical_degradation: "10-20 dB", mechanism: "PWM 谐波辐射耦合", diagnosis_hint: "振动开关测试" }
+
+  # Speaker PA 行
+  - { source: SPEAKER_PA, victim: W24, sop: W24-05, tier: P2, high_priority: false, typical_degradation: "2-6 dB", mechanism: "Class-D 谐波",  diagnosis_hint: "外放开关测试" }
+  - { source: SPEAKER_PA, victim: LLB, sop: LLB-06, tier: P2, high_priority: false, typical_degradation: "2-6 dB", mechanism: "Class-D 谐波",  diagnosis_hint: "外放开关测试" }
+  - { source: SPEAKER_PA, victim: GL1, sop: GL1-06, tier: P2, high_priority: false, typical_degradation: "2-6 dB", mechanism: "Class-D 谐波",  diagnosis_hint: "外放开关测试" }
+
+  # Charger 行
+  - { source: CHARGER, victim: W24, sop: W24-06, tier: P1, high_priority: false, typical_degradation: "3-8 dB",  mechanism: "Buck/Boost 开关",     diagnosis_hint: "拔掉充电器" }
+  - { source: CHARGER, victim: LLB, sop: LLB-07, tier: P1, high_priority: true,  typical_degradation: "5-12 dB", mechanism: "充电噪声传导",         diagnosis_hint: "拔掉充电器" }
+  - { source: CHARGER, victim: GL1, sop: GL1-07, tier: P1, high_priority: false, typical_degradation: "3-8 dB",  mechanism: "开关噪声谐波",         diagnosis_hint: "拔掉充电器" }
+
+  # USB 3.0 行
+  - { source: USB3, victim: W24, sop: W24-07, tier: P1, high_priority: false, typical_degradation: "3-10 dB", mechanism: "SS 信号高次谐波", diagnosis_hint: "USB 连接测试" }
+  - { source: USB3, victim: W5,  sop: W5-04,  tier: P0, high_priority: true,  typical_degradation: "10-20 dB", mechanism: "基频直接辐射",    diagnosis_hint: "USB 连接测试" }
+  - { source: USB3, victim: LHB, sop: LHB-04, tier: P1, high_priority: true,  typical_degradation: "8-15 dB",  mechanism: "基频直接辐射",    diagnosis_hint: "USB 连接测试" }
+
+# =========================================================================
+# SOP 编号规则(供生成器引用)
+# =========================================================================
+sop_numbering:
+  format: "{victim_code}-{sequence_number}"
+  note: "矩阵声明的源在 SOP 文件的 组合信息 章节详述,而非编入文件名"
+  victim_codes: [W24, W5, LLB, LHB, GL1, GL5, NORMAL]
+  source_codes: [LC, CA, DD, PM, OS, RP, NL, PA, AT, SL, BC, VB, SP, CH, U3]
+
+# =========================================================================
+# 谐波参考(保留原 matrix-table 的谐波速查)
+# =========================================================================
+harmonic_reference:
+  - source: "LCD (80 MHz)"
+    victim: "GNSS L1"
+    order: 20
+    hit: "1600 MHz"
+  - source: "LCD (80 MHz)"
+    victim: "WiFi 2.4G"
+    order: 30
+    hit: "2400 MHz"
+  - source: "PMIC (2 MHz)"
+    victim: "LTE LB"
+    order: 350
+    hit: "700 MHz"
+  - source: "VIB (30 kHz)"
+    victim: "GNSS L1"
+    order: 52000
+    hit: "1560 MHz"
+  - source: "USB (2.5 GHz)"
+    victim: "WiFi 5G"
+    order: 1
+    hit: "直接命中"
