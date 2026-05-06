@@ -6,9 +6,12 @@
 #
 # 修改流程: 改 matrix.yaml → 跑 python3 tools/gen_matrix_views.py → commit 二者
 #
-version: "2.0.0"
-updated: "2026-04-27"
+version: "2.1.0"
+updated: "2026-05-06"
 changelog:
+  - version: "2.1.0"
+    date: "2026-05-06"
+    notes: "新增 NFC 共存干扰源(B.2 案例反哺),新增 SHIELD_LEAK→W24 映射(A.2 案例反哺),W24-08/W24-09 加入矩阵"
   - version: "2.0.0"
     date: "2026-04-27"
     notes: "从 matrix-table.md v1.1.0 结构化,统一命名,消除 source-list/victim-list 漂移"
@@ -182,6 +185,17 @@ sources:
     normal_impact: null
     priority: 高
 
+  NFC:
+    label: "NFC"
+    code: NF
+    category: 共存
+    base_freq_range: "13.56 MHz(载波)"
+    noise_source: "NFC 载波高次谐波 + 射频通路共存辐射"
+    typical_interference: "高次谐波密集覆盖 2.4G 附近(177 次谐波 ≈ 2400 MHz)"
+    normal_impact: null
+    priority: 中
+    notes: "场景激活时(Display/Touch/支付)NFC 工作,与 WiFi 2.4G 同频段共存"
+
 # =========================================================================
 # 受扰体 (Victims)
 # =========================================================================
@@ -318,6 +332,12 @@ mappings:
   - { source: USB3, victim: W5,  sop: W5-04,  tier: P0, high_priority: true,  typical_degradation: "10-20 dB", mechanism: "基频直接辐射",    diagnosis_hint: "USB 连接测试" }
   - { source: USB3, victim: LHB, sop: LHB-04, tier: P1, high_priority: true,  typical_degradation: "8-15 dB",  mechanism: "基频直接辐射",    diagnosis_hint: "USB 连接测试" }
 
+  # NFC 共存干扰(2026-05-06 新增,来自 EMC B.2 案例:O2 Display 场景 WiFi 2.4G Fail 20 dB)
+  - { source: NFC,         victim: W24, sop: W24-08, tier: P1, high_priority: true,  typical_degradation: "10-20 dB", mechanism: "共存高次谐波 + 射频通路耦合", diagnosis_hint: "关闭 NFC 功能验证" }
+
+  # 屏蔽不良导致 WiFi 2.4G 恶化(2026-05-06 新增,来自 EMC A.2 案例:O11 chain1 平坦度 6.2 dB)
+  - { source: SHIELD_LEAK, victim: W24, sop: W24-09, tier: P1, high_priority: false, typical_degradation: "3-8 dB",   mechanism: "屏蔽罩泄露宽带辐射",         diagnosis_hint: "近场扫描屏蔽罩边缘" }
+
 # =========================================================================
 # SOP 编号规则(供生成器引用)
 # =========================================================================
@@ -325,7 +345,7 @@ sop_numbering:
   format: "{victim_code}-{sequence_number}"
   note: "矩阵声明的源在 SOP 文件的 组合信息 章节详述,而非编入文件名"
   victim_codes: [W24, W5, LLB, LHB, GL1, GL5, NORMAL]
-  source_codes: [LC, CA, DD, PM, OS, RP, NL, PA, AT, SL, BC, VB, SP, CH, U3]
+  source_codes: [LC, CA, DD, PM, OS, RP, NL, PA, AT, SL, BC, VB, SP, CH, U3, NF]
 
 # =========================================================================
 # 谐波参考(保留原 matrix-table 的谐波速查)
