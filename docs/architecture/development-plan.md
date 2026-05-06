@@ -32,7 +32,7 @@
 | harness 层折叠 | ✅ | `/diagnose` v2.0 单一真相源 + skill 触发器 + agent 人格 |
 | 矩阵结构化 | ✅ | `matrix.yaml` + `gen_matrix_views.py` 生成器 |
 | SOP 覆盖补齐 | ✅ | `gen_sop_stubs.py` + 26 个 placeholder |
-| 架构一致性检查 v2 | ✅ | `check-architecture-consistency.py` 9 项检查,0 错 0 警 |
+| 架构一致性检查 v2 | ✅ | `check-architecture-consistency.py` 10 项检查,0 错 0 警 |
 | 术语与变更记录 | ✅ | `glossary.md` + `CHANGELOG.md` |
 
 详见 [CHANGELOG.md](../../CHANGELOG.md) v2.0.0。

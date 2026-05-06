@@ -15,5 +15,18 @@
       "Bash(git add *)",
       "Bash(git commit *)"
     ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash tools/linter_hook.sh"
+          }
+        ]
+      }
+    ]
   }
 }
