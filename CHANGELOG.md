@@ -6,6 +6,71 @@ Echo·Desense 知识库与 harness 层的版本变更记录。
 
 ---
 
+## [2.2.0] — 2026-05-06
+
+### 本版本里程碑
+
+Phase 2 Sprint 2 交付完成。**一日内**完成 Week 1(7 案例拆分)+ Week 2(8 SOP v0.9 填充)全部工作(Agent 委派 + 分批并行方式)。
+
+### Added
+
+**EMC 2024 案例拆独立文件(4 → 11)**:
+- `knowledge/cases/O2-W5-OSC-spur.md`            (A.1) 软件解样本
+- `knowledge/cases/O11-W24-shield-chain1.md`     (A.2) chain 差异诊断
+- `knowledge/cases/O3-LLB-charger-wireless.md`   (A.3) 无线充电源
+- `knowledge/cases/O11-LHB-CPU-clock-B40.md`     (B.1) 谐波命中 2304 MHz
+- `knowledge/cases/O10-LHB-MIPI-brightness.md`   (B.3) 6 天快速闭环标杆
+- `knowledge/cases/O11U-LHB-multisource.md`      (C.2) 多源叠加耗时代表
+- `knowledge/cases/O11U-GL1-shield-aperture.md`  (C.3) 设计级改版
+
+**8 个 EMC 案例直驱 SOP 填充(v0.1 → v0.9 方法论版)**:
+- `knowledge/sops/W24/W24-08.md` — NFC → WiFi 2.4G(312 行) 确立"关闭 NFC 5 分钟黄金动作"
+- `knowledge/sops/W24/W24-09.md` — 屏蔽泄露 → WiFi 2.4G(338 行) 固化信道平坦度三档阈值
+- `knowledge/sops/W5/W5-01.md`   — OSC/MIPI → WiFi 5G(307 行) 把 NV 数字滤波器提升为软件主路径
+- `knowledge/sops/LHB/LHB-01.md` — OSC/CPU/MIPI → LTE HB(474 行) 双案例对比表(CPU vs MIPI 路径 9 维度)
+- `knowledge/sops/LHB/LHB-03.md` — DDR → LTE HB(426 行) 步骤 2.6 多源叠加 5 子节 + 叠加决策表
+- `knowledge/sops/LLB/LLB-03.md` — DDR → LTE LB(382 行) 结构性辐射路径诊断(单源多路径)
+- `knowledge/sops/GL1/GL1-03.md` — DDR → GNSS L1(417 行) GPS "3 dB 即严重"重塑阈值 + 3 周时间护栏
+- `knowledge/sops/GL1/GL1-04.md` — PMIC → GNSS L1(384 行) 设计级开窗专节 + C.3 一案多 SOP 互引
+
+**方法论贡献**:
+- **一案多 SOP 模式**:C.3 案例被 GL1-03 + GL1-04 + NORMAL-07 三条 SOP 引用,验证矩阵"一案多 SOP"的设计
+- **步骤 2.6 多源叠加排查法深化**:从单章节扩展为 LHB-03 中的 5 子节(触发 / 单源隔离 / 组合关断 / 叠加决策表 / 典型结论)
+- **双案例对比表(LHB-01)**:两案例驱动 SOP 时的结构范式,防线性拼接
+- **GPS 特殊性专节**:把"3 dB 即严重"固化为 GPS SOP 的阈值 / 测试方法 / 软件规避优先级 / 设计护栏的系统化差异
+
+### Changed
+
+- `knowledge/cases/EMC-2024-Desense-triage.md`: A.1 / A.2 / A.3 / B.1 / B.3 / C.2 / C.3 章节加"独立案例已拆出"引用标记
+- `tools/check-architecture-consistency.py`: 新增 `is_methodology` 判据,v0.9 方法论版行数阈值区分于正式 SOP(180-500 vs 180-300),容纳多案例 / 多源叠加扩展章节
+- `CLAUDE.md`: 新增"飞书数据源约定"小节(Sprint 2 前置 `chore/feishu-integration`)
+
+### Infrastructure
+
+- **Sprint 2 并行执行成功**:
+  - Week 1:单会话多 Write 并行 7 个案例文件(Method A)
+  - Week 2:Agent 委派,3 批次 × 3 / 3 / 2 并行 Agent(Method B)
+  - 总耗时 < 1 天,相比 Sprint 1 计划的 10 天进一步验证了并行方式有效性
+- **分支规划**:
+  - `feature/sprint-2-cases`(Week 1)→ develop → main
+  - `feature/sprint-2-sops`(Week 2,3 批次合并到同一分支)
+  - 合入节奏对齐 `docs/guides/git-workflow.md`
+
+### 指标达成
+
+| 指标 | v2.1.0 | v2.2.0 | 目标 |
+|---|:---:|:---:|:---:|
+| 已完成 SOP 数(含 v0.9) | 17 | **25** | 25 ✓ |
+| 案例库 | 4 | **11** | 11 ✓ |
+| matrix.yaml sources | 16 | 16 | 16 |
+| matrix.yaml mappings | 49 | 49 | 49 |
+| 方法论文档 | 5 | 5 | 5 |
+| `/diagnose` 版本 | v2.1 | v2.1 | v2.1 |
+| linter 状态 | 0/0 | **0/0** | 0/0 ✓ |
+| 架构 linter 检查项 | 9 | 9(阈值细化) | 9+ |
+
+---
+
 ## [2.1.0] — 2026-05-06
 
 ### 本版本里程碑
