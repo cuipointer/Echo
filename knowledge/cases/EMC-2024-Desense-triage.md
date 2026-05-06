@@ -65,6 +65,8 @@ reviewers: [射频天线项目接口人]
 
 ### A.1 O2 WiFi 5G 5765 Normal Desense Fail 20 dB — 时钟 Spur
 
+> **独立案例已拆出**:详见 [O2-W5-OSC-spur.md](O2-W5-OSC-spur.md)(2026-05-06 Sprint 2 拆分)
+
 **基本信息**:
 
 - **机型**:O2
@@ -103,6 +105,8 @@ reviewers: [射频天线项目接口人]
 ---
 
 ### A.2 O11 WiFi 2.4G chain1 Normal 信道平坦度 6.2 dB — CPU 屏蔽罩泄露
+
+> **独立案例已拆出**:详见 [O11-W24-shield-chain1.md](O11-W24-shield-chain1.md)(2026-05-06 Sprint 2 拆分)
 
 **基本信息**:
 
@@ -143,6 +147,8 @@ reviewers: [射频天线项目接口人]
 ---
 
 ### A.3 O3 LTE B28 Normal 3~5 dB — 无线充弹片下方电源泄露
+
+> **独立案例已拆出**:详见 [O3-LLB-charger-wireless.md](O3-LLB-charger-wireless.md)(2026-05-06 Sprint 2 拆分)
 
 **基本信息**:
 
@@ -187,6 +193,8 @@ reviewers: [射频天线项目接口人]
 ## 子类 B:场景 Desense 重点案例(3 个)
 
 ### B.1 O11 B40 DIV FrontCam 场景 16 dB — CPU 768M 三次倍频
+
+> **独立案例已拆出**:详见 [O11-LHB-CPU-clock-B40.md](O11-LHB-CPU-clock-B40.md)(2026-05-06 Sprint 2 拆分)
 
 **基本信息**:
 
@@ -272,6 +280,8 @@ reviewers: [射频天线项目接口人]
 ---
 
 ### B.3 O10 N77 亮屏场景 Desense 11 dB — 屏 MIPI CLK 高频噪声
+
+> **独立案例已拆出**:详见 [O10-LHB-MIPI-brightness.md](O10-LHB-MIPI-brightness.md)(2026-05-06 Sprint 2 拆分)
 
 **基本信息**:
 
@@ -361,6 +371,8 @@ reviewers: [射频天线项目接口人]
 
 ### C.2 O11U MHB Desense 7-11 dB — CPU 屏蔽罩 + 主摄 FPC 噪声叠加
 
+> **独立案例已拆出**:详见 [O11U-LHB-multisource.md](O11U-LHB-multisource.md)(2026-05-06 Sprint 2 拆分)
+
 **基本信息**:
 
 - **机型**:O11U
@@ -405,6 +417,8 @@ reviewers: [射频天线项目接口人]
 ---
 
 ### C.3 O11U GPS L1 DDR Desense 3 dB — PMIC 屏蔽罩顶部泄露(极敏感)
+
+> **独立案例已拆出**:详见 [O11U-GL1-shield-aperture.md](O11U-GL1-shield-aperture.md)(2026-05-06 Sprint 2 拆分)
 
 **基本信息**:
 
