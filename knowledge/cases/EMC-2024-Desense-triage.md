@@ -229,6 +229,9 @@ reviewers: [射频天线项目接口人]
 
 ### B.2 O2 WiFi 2.4G Display Desense Fail 20 dB — NFC 谐波干扰
 
+> **独立案例已拆出**:详见 [O2-NFC-W24.md](O2-NFC-W24.md)(2026-05-06 拆分)
+
+
 **基本信息**:
 
 - **机型**:O2
@@ -311,6 +314,9 @@ reviewers: [射频天线项目接口人]
 ## 子类 C:DDR Desense 重点案例(3 个)
 
 ### C.1 O11 B8/B5/B26 DDR Desense 3-5 dB — 前摄破洞耦合路径
+
+> **独立案例已拆出**:详见 [O11-DDR-LLB-aperture.md](O11-DDR-LLB-aperture.md)(2026-05-06 拆分)
+
 
 **基本信息**:
 
