@@ -35,7 +35,7 @@
 | 架构一致性检查 v2 | ✅ | `check-architecture-consistency.py` 9 项检查,0 错 0 警 |
 | 术语与变更记录 | ✅ | `glossary.md` + `CHANGELOG.md` |
 
-详见 [CHANGELOG.md](../CHANGELOG.md) v2.0.0。
+详见 [CHANGELOG.md](../../CHANGELOG.md) v2.0.0。
 
 ---
 
@@ -99,7 +99,7 @@
 | **EMC**(电磁兼容) | `extensions/EMC/`(暂无) | 侧重抗扰度 + 发射 | 团队决策启动 |
 | **Camera 横向** | `extensions/Camera/` | 跨 Desense/EMC/SAR 的 Camera 通用策略 | 出现跨大类 Camera 问题时 |
 
-**不扩展的默认姿态**:半年内无启动 → `extensions/` 收敛删除,避免架构空壳。详见 [extensions/README.md](../extensions/README.md)。
+**不扩展的默认姿态**:半年内无启动 → `extensions/` 收敛删除,避免架构空壳。详见 [extensions/README.md](../../extensions/README.md)。
 
 ---
 
@@ -147,7 +147,7 @@
 
 ## 贡献指南摘要
 
-详见 [docs/contributing.md](contributing.md)。要点:
+详见 [docs/contributing.md](../guides/contributing.md)。要点:
 
 - **新 SOP**:先改 `matrix.yaml`(声明) → `gen_sop_stubs.py`(生成 stub) → 填充内容 → 状态改为已完成
 - **新案例**:写到 `knowledge/cases/<机型>-<场景>-<频段>-<关键词>.md`,在末尾引用对应 SOP,并提议 SOP 更新
@@ -174,16 +174,16 @@
 
 ## 参考
 
-- [CLAUDE.md](../CLAUDE.md) — 项目级行为规范
-- [CHANGELOG.md](../CHANGELOG.md) — 历次架构变更记录
-- [knowledge/glossary.md](../knowledge/glossary.md) — 术语词典
-- [tools/check-architecture-consistency.py](../tools/check-architecture-consistency.py) — 架构一致性守护
+- [CLAUDE.md](../../CLAUDE.md) — 项目级行为规范
+- [CHANGELOG.md](../../CHANGELOG.md) — 历次架构变更记录
+- [knowledge/glossary.md](../../knowledge/glossary.md) — 术语词典
+- [tools/check-architecture-consistency.py](../../tools/check-architecture-consistency.py) — 架构一致性守护
 - [docs/architecture.md](architecture.md) — 系统架构与工作流图
 - [docs/phase2-sprint-plan.md](phase2-sprint-plan.md) — Phase 2 Sprint 1 计划 + 并行执行方案
-- [docs/git-workflow.md](git-workflow.md) — Git 分支规范
+- [docs/git-workflow.md](../guides/git-workflow.md) — Git 分支规范
 - 原始参考文档:[射频天线项目接口人工作手册](https://mi.feishu.cn/docx/DUKIdPkSGoH6UkxGRWwc5p84n7f)
 
 ---
 
 **维护者**:射频天线团队 / Echo 项目接口人
-**欢迎贡献**:见 [docs/contributing.md](contributing.md)
+**欢迎贡献**:见 [docs/contributing.md](../guides/contributing.md)

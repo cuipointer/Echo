@@ -110,7 +110,7 @@
 
 ### 工具
 - [架构一致性检查](../../../tools/check-architecture-consistency.py)
-- [SOP编写标准](../../../docs/sop-writing-standard.md)
+- [SOP编写标准](../../../docs/standards/sop-writing-standard.md)
 
 ## 更新记录
 

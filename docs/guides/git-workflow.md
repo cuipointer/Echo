@@ -433,4 +433,4 @@ A:**不要删除或修改已 push 的 tag**。打一个新 tag(比如 v2.1.1)作
 - [Conventional Commits](https://www.conventionalcommits.org/)
 - [Semantic Versioning](https://semver.org/)
 - [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github-flow)
-- 本仓库:[CHANGELOG.md](../CHANGELOG.md) / [development-plan.md](development-plan.md)
+- 本仓库:[CHANGELOG.md](../../CHANGELOG.md) / [development-plan.md](../architecture/development-plan.md)

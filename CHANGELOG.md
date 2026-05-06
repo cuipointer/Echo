@@ -29,7 +29,7 @@ Phase 2 Sprint 1 交付完成。10 天 Sprint 压缩为约 5 天(并行执行方
 - 状态标记 `v0.9.0 方法论版(待现场复测)`,等待首次项目落地后升 v1.0
 
 **计划文档**:
-- `docs/phase2-sprint-plan.md` Sprint 1 计划 + 第九章并行执行方案(DAG/3 种并行方式/时间压缩)
+- `docs/architecture/phase2-sprint-plan.md` Sprint 1 计划 + 第九章并行执行方案(DAG/3 种并行方式/时间压缩)
 
 ### Changed
 
