@@ -119,3 +119,39 @@ Skill(由 Claude Code 自动选择触发):
 - `harmonic-calc`:谐波计算
 - `sop-executor`:按 SOP 编号执行排查
 - `engineering-logger`:任务完成后写日志
+
+## 飞书数据源约定
+
+Echo 项目的案例原始数据(EMC 案例表、接口人手册等)托管在飞书。读取规则:
+
+- **硬规则**:遇到 `*.feishu.cn` URL 必须用 `feishu` CLI,**禁止**用 `WebFetch`(会被 302 到登录页,拿不到内容)。
+- **工具位置**:`feishu` CLI 为 user-scope 全局命令(`/home/cuihan/.nvm/.../bin/feishu` v1.2.1+),项目内不再封装独立 skill,user-scope `~/.claude/skills/feishu/SKILL.md` 已是权威文档。
+
+### 常用调用
+
+```bash
+# 1. 看表格结构(有哪些 sub-sheet)
+feishu fetch <sheet_url>                           # 返回 JSON 索引
+
+# 2. 读指定 sub-sheet 的单元格范围(JSON 输出,含 values 2D 数组)
+feishu sheet read <sheet_url> "<sheetId>!A1:M140"
+
+# 3. docx / wiki / bitable 等其它类型
+feishu fetch <url>                                  # 自动识别类型
+feishu docx --help / feishu bitable --help          # 需要细粒度时查看
+```
+
+### Echo 常用 URL 登记
+
+| 用途 | URL | sheetId | 备注 |
+|---|---|---|---|
+| 22~24 年 EMC 案例总结 | `https://mi.feishu.cn/sheets/VXwJs8x6vhr77OtaSFocPGAOnId` | `0L66Vr`(24 年)/ `C4WOcW`(23 年)/ `4vxpTq`(22 年) | 13 列:问题等级 / 测试项 / 问题领域 / 根因归类 / 涉及项目 / 出现频次 / 阶段 / 根因 / 问题详细描述 / 解决方案 / 持续天数 / 总频次 |
+| 射频天线接口人工作手册 | `https://mi.feishu.cn/docx/DUKIdPkSGoH6UkxGRWwc5p84n7f` | — | docx,用 `feishu fetch` 即可 |
+
+### 速率限制约定
+
+飞书 API 对频繁调用会返回 `error 99991400 request trigger frequency limit`。遇到时:
+
+1. **暂停 15 秒**后重试。
+2. **合批**:一次读一个较大范围(如 `A1:M140`)胜过多次小 read。
+3. **避免爆破**:并行 Agent 委派时,每个 Agent 独立 feishu 调用,主会话需对并发度做控制(建议 ≤ 3)。
