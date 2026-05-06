@@ -61,11 +61,11 @@ class ArchitectureChecker:
                 if lines < 120 or lines > 320:
                     self.warnings.append(f"{rel}: stub 行数异常 ({lines} 行),模板预期 120-300")
             elif is_methodology:
-                # v0.9 方法论版:180-380(含案例启示 / 多章节 反哺)
+                # v0.9 方法论版:180-500(含案例启示 / 多源叠加 / 双案例对比等扩展章节)
                 if lines < 180:
                     self.warnings.append(f"{rel}: 方法论版过短 ({lines} 行),建议 ≥ 200")
-                elif lines > 380:
-                    self.warnings.append(f"{rel}: 方法论版过长 ({lines} 行),建议精简到 ≤ 350")
+                elif lines > 500:
+                    self.warnings.append(f"{rel}: 方法论版过长 ({lines} 行),建议精简到 ≤ 450")
             else:
                 # 正式 SOP:180-300
                 if lines < 180:
