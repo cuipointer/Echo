@@ -72,7 +72,7 @@
 
 - **分支**:`feature/echo-framework-feedback`(从 develop 拉)
 - **动作**:
-  1. 编辑 [knowledge/matrix/matrix.yaml](../knowledge/matrix/matrix.yaml):
+  1. 编辑 [knowledge/matrix/matrix.yaml](../../knowledge/matrix/matrix.yaml):
      - 新增 source `NFC`(category: 共存;base_freq: 13.56 MHz;典型干扰:高次谐波命中 2.4G)
      - 新增 mapping `NFC → W24`(tier P1,typical_degradation: 10-20 dB,对应新 SOP `W24-08`)
      - 新增 source `CPU_SHIELD`(或扩展现有 `SHIELD_LEAK` 语义)→ `W24` 映射(tier P1,对应 `W24-09`)
@@ -80,7 +80,7 @@
   3. 跑生成器:`python3 tools/gen_matrix_views.py`
   4. 验证生成的 matrix-table.md / source-list.md / victim-list.md
 - **交付**:`matrix.yaml` + 3 个视图 md(自动生成)
-- **复用**:[tools/gen_matrix_views.py](../tools/gen_matrix_views.py)
+- **复用**:[tools/gen_matrix_views.py](../../tools/gen_matrix_views.py)
 - **验收**:linter 0/0;运行 `python3 tools/gen_sop_stubs.py` 为 2 个新映射生成 stub(W24-08 / W24-09)
 
 #### T1.3 — 方法论沉淀:宽窄带判别(Day 2,1 天)
@@ -102,11 +102,11 @@
 
 - **分支**:同 `feature/echo-framework-feedback`
 - **动作**:
-  1. 在 [knowledge/sops/_template.md](../knowledge/sops/_template.md) "三、软件排查步骤" 新增 **步骤 2.6 多源叠加排查法**:
+  1. 在 [knowledge/sops/_template.md](../../knowledge/sops/_template.md) "三、软件排查步骤" 新增 **步骤 2.6 多源叠加排查法**:
      - 触发条件:步骤 2.5 子功能排查后仍有显著 Desense;或现象表现为"多场景共同恶化但差异大"
      - 操作:逐一**隔离验证**每个可疑源的贡献(关 A 看改善 → 关 B 看改善 → 两者都关看总改善 → 推断是否叠加)
      - 决策逻辑表
-  2. 在 [.claude/commands/diagnose.md](../.claude/commands/diagnose.md) Step 3 宽窄带判别章节引用新文档(`knowledge/methodology/bandwidth-discrimination.md`),版本升到 v2.1
+  2. 在 [.claude/commands/diagnose.md](../../.claude/commands/diagnose.md) Step 3 宽窄带判别章节引用新文档(`knowledge/methodology/bandwidth-discrimination.md`),版本升到 v2.1
 - **交付**:`_template.md` 改动 + `diagnose.md` v2.1
 
 #### T1.5 — 拆分 EMC 案例(Day 3 下午,0.5 天)
@@ -137,10 +137,10 @@
 #### T2.1 — LLB-07(充电器 → LTE LB)(Day 6-7,1.5 天)
 
 - **分支**:`sop/llb-07`(从 develop 拉)
-- **关键文件**:[knowledge/sops/LLB/LLB-07.md](../knowledge/sops/LLB/LLB-07.md)
+- **关键文件**:[knowledge/sops/LLB/LLB-07.md](../../knowledge/sops/LLB/LLB-07.md)
 - **填充来源**:
   - 参考 EMC C.1(O11 B8/B5/B26 DDR,相近但不相同)
-  - 参考 [LLB-04](../knowledge/sops/LLB/LLB-04.md)(PMIC Buck → LTE LB,同受扰体)
+  - 参考 [LLB-04](../../knowledge/sops/LLB/LLB-04.md)(PMIC Buck → LTE LB,同受扰体)
   - 结合 Charger IC 特性(500 kHz - 2 MHz 开关)
 - **交付**:LLB-07 从 v0.1 → v0.9,含完整 8 章节;版本标记"方法论版待复测"
 - **分支合并**:完成后 → develop
@@ -148,10 +148,10 @@
 #### T2.2 — W24-03(DDR → WiFi 2.4G)(Day 8-9,1.5 天)
 
 - **分支**:`sop/w24-03`
-- **关键文件**:[knowledge/sops/W24/W24-03.md](../knowledge/sops/W24/W24-03.md)
+- **关键文件**:[knowledge/sops/W24/W24-03.md](../../knowledge/sops/W24/W24-03.md)
 - **填充来源**:
   - 参考 EMC C.1 / C.2 的 DDR 场景
-  - 参考 [W24-01](../knowledge/sops/W24/W24-01.md) 已有的屏蔽罩/滤波 SOP 结构
+  - 参考 [W24-01](../../knowledge/sops/W24/W24-01.md) 已有的屏蔽罩/滤波 SOP 结构
   - 结合 DDR 频率(200-933 MHz)谐波命中 WiFi 2.4G 的计算
 - **交付**:W24-03 v0.9
 - **分支合并**:完成后 → develop
@@ -159,9 +159,9 @@
 #### T2.3 — LHB-04(USB3 → LTE HB)(Day 10 上午,1 天)
 
 - **分支**:`sop/lhb-04`
-- **关键文件**:[knowledge/sops/LHB/LHB-04.md](../knowledge/sops/LHB/LHB-04.md)
+- **关键文件**:[knowledge/sops/LHB/LHB-04.md](../../knowledge/sops/LHB/LHB-04.md)
 - **填充来源**:
-  - 参考 [W5-04](../knowledge/sops/W5/W5-04.md)(USB3 → WiFi 5G,同干扰源不同受扰体)—— 主要结构复用
+  - 参考 [W5-04](../../knowledge/sops/W5/W5-04.md)(USB3 → WiFi 5G,同干扰源不同受扰体)—— 主要结构复用
   - USB 3.0 基频 2.5 GHz,LTE HB 2300-3700 MHz 有直接频率命中风险
 - **交付**:LHB-04 v0.9
 - **分支合并**:完成后 → develop
@@ -169,11 +169,11 @@
 #### T2.4 — Sprint 收尾(Day 10 下午,1 天)
 
 - **动作**:
-  1. 更新 [CHANGELOG.md](../CHANGELOG.md) 加 **v2.1.0** 条目(EMC 反哺 + 3 P0 SOP 方法论版)
+  1. 更新 [CHANGELOG.md](../../CHANGELOG.md) 加 **v2.1.0** 条目(EMC 反哺 + 3 P0 SOP 方法论版)
   2. `develop` → `main`(`git merge --no-ff`)
   3. 打 tag:`git tag -a v2.1.0 -m "v2.1.0 - Phase 2 Sprint 1 完成..."`
   4. `git push origin main develop v2.1.0` 全量推远端
-  5. 更新 [logs/daily/](../logs/daily/) 写 Day 10 的收官日志
+  5. 更新 [logs/daily/](../../logs/daily/) 写 Day 10 的收官日志
 - **交付**:v2.1.0 tag + 远端同步
 
 ---
@@ -257,7 +257,7 @@ git log origin/develop..develop --oneline  # 应为空
 
 ## 七、冷却期 & 合入节奏
 
-遵循 [docs/git-workflow.md](git-workflow.md):
+遵循 [docs/git-workflow.md](../guides/git-workflow.md):
 
 ```
 feature/echo-framework-feedback   ──┐
@@ -289,11 +289,11 @@ Phase 3 启动条件:
 ## 参考
 
 - 上游路线图:[docs/development-plan.md](development-plan.md)
-- Git 工作流:[docs/git-workflow.md](git-workflow.md)
-- 变更历史:[CHANGELOG.md](../CHANGELOG.md)
-- EMC 案例分析源:[knowledge/cases/EMC-2024-Desense-triage.md](../knowledge/cases/EMC-2024-Desense-triage.md)
-- 矩阵真相源:[knowledge/matrix/matrix.yaml](../knowledge/matrix/matrix.yaml)
-- 架构守护:[tools/check-architecture-consistency.py](../tools/check-architecture-consistency.py)
+- Git 工作流:[docs/git-workflow.md](../guides/git-workflow.md)
+- 变更历史:[CHANGELOG.md](../../CHANGELOG.md)
+- EMC 案例分析源:[knowledge/cases/EMC-2024-Desense-triage.md](../../knowledge/cases/EMC-2024-Desense-triage.md)
+- 矩阵真相源:[knowledge/matrix/matrix.yaml](../../knowledge/matrix/matrix.yaml)
+- 架构守护:[tools/check-architecture-consistency.py](../../tools/check-architecture-consistency.py)
 
 ---
 

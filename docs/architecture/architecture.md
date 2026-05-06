@@ -149,13 +149,13 @@ Echo 的**核心设计决策**是为每一类知识建立**单一真相源**，�
 
 | 层 | 真相源 | 派生视图 |
 |---|---|---|
-| 诊断工作流 | [.claude/commands/diagnose.md](../.claude/commands/diagnose.md) v2.1 | echo agent 引用、diagnose-desense skill 转交 |
-| 矩阵 | [knowledge/matrix/matrix.yaml](../knowledge/matrix/matrix.yaml) v2.1.0 | `matrix-table.md` / `source-list.md` / `victim-list.md`(由 `tools/gen_matrix_views.py` 生成) |
-| 术语 | [knowledge/glossary.md](../knowledge/glossary.md) | 各 SOP 附录引用 |
-| 方法论 | [knowledge/methodology/](../knowledge/methodology/) | `/diagnose` Step 3 引用 `bandwidth-discrimination.md`;echo agent 引用四原则文档 |
-| 变更记录 | [CHANGELOG.md](../CHANGELOG.md) | 各 SOP / 文件自带 `**版本**` 字段 |
+| 诊断工作流 | [.claude/commands/diagnose.md](../../.claude/commands/diagnose.md) v2.1 | echo agent 引用、diagnose-desense skill 转交 |
+| 矩阵 | [knowledge/matrix/matrix.yaml](../../knowledge/matrix/matrix.yaml) v2.1.0 | `matrix-table.md` / `source-list.md` / `victim-list.md`(由 `tools/gen_matrix_views.py` 生成) |
+| 术语 | [knowledge/glossary.md](../../knowledge/glossary.md) | 各 SOP 附录引用 |
+| 方法论 | [knowledge/methodology/](../../knowledge/methodology/) | `/diagnose` Step 3 引用 `bandwidth-discrimination.md`;echo agent 引用四原则文档 |
+| 变更记录 | [CHANGELOG.md](../../CHANGELOG.md) | 各 SOP / 文件自带 `**版本**` 字段 |
 
-守护由 [tools/check-architecture-consistency.py](../tools/check-architecture-consistency.py) v2 执行(9 项自动检查，当前 0 错 0 警)。
+守护由 [tools/check-architecture-consistency.py](../../tools/check-architecture-consistency.py) v2 执行(9 项自动检查，当前 0 错 0 警)。
 
 ## 7. Phase 2 Sprint 1 反哺路径(2026-05-06)
 
@@ -178,4 +178,4 @@ EMC 2024 案例分析(9 案例)  ──→  6 条架构建议
                        LLB-07 / W24-03 / LHB-04
 ```
 
-详见 [CHANGELOG.md](../CHANGELOG.md) v2.1.0 + [docs/phase2-sprint-plan.md](phase2-sprint-plan.md)。
+详见 [CHANGELOG.md](../../CHANGELOG.md) v2.1.0 + [docs/phase2-sprint-plan.md](phase2-sprint-plan.md)。
