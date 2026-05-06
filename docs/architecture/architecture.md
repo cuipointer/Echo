@@ -155,7 +155,7 @@ Echo 的**核心设计决策**是为每一类知识建立**单一真相源**，�
 | 方法论 | [knowledge/methodology/](../../knowledge/methodology/) | `/diagnose` Step 3 引用 `bandwidth-discrimination.md`;echo agent 引用四原则文档 |
 | 变更记录 | [CHANGELOG.md](../../CHANGELOG.md) | 各 SOP / 文件自带 `**版本**` 字段 |
 
-守护由 [tools/check-architecture-consistency.py](../../tools/check-architecture-consistency.py) v2 执行(9 项自动检查，当前 0 错 0 警)。
+守护由 [tools/check-architecture-consistency.py](../../tools/check-architecture-consistency.py) v2 执行(10 项自动检查，当前 0 错 0 警)。
 
 ## 7. Phase 2 Sprint 1 反哺路径(2026-05-06)
 

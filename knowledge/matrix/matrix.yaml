@@ -195,6 +195,7 @@ sources:
     normal_impact: null
     priority: 中
     notes: "场景激活时(Display/Touch/支付)NFC 工作,与 WiFi 2.4G 同频段共存"
+    decision_tree_bypass: true  # 新增源,决策树待补入 WiFi 2.4G 共存分支;先走 matrix 直查
 
 # =========================================================================
 # 受扰体 (Victims)

@@ -6,6 +6,57 @@ Echo·Desense 知识库与 harness 层的版本变更记录。
 
 ---
 
+## [2.3.0] — 2026-05-06
+
+### 本版本里程碑
+
+Phase 3 Sprint 1:自动化基建 —— 把 Sprint 2 手工编排的 Agent 流程固化为可复用 skill / 脚本 / hook,并扩展 linter 到 10 项检查。并行执行 3 Agent + 1 inline,人力 ~75 min / Claude 墙钟 ~45 min 完成(原估 3-5 天 × 8h)。
+
+### Added
+
+**自动化 skill / 脚本**:
+- `.claude/skills/case-to-sop/` — 新 skill v1.0.0(143 行),从案例 frontmatter `sop_refs:` 倒推每个 SOP 的状态,生成"追加 / 重写"行动计划
+- `tools/case_to_sop.py` — 配套实现(262 行),输出 Markdown 计划到 stdout,不修改 SOP 文件(Claude 按计划 Write)
+- `tools/matrix_coverage.py` — 矩阵覆盖度报告(438 行),输出 4 节 Markdown:汇总 / 详细覆盖度表 / 盲点清单 / 案例孤儿;支持 `--tier P0|P1|P2|all` / `--format markdown|json` / `--output PATH`
+
+**hook 自动化**:
+- `.claude/settings.json` 新增 PostToolUse hook(matcher `Edit|Write|MultiEdit`),调用 `tools/linter_hook.sh`
+- `tools/linter_hook.sh` — hook 入口,读 stdin JSON payload 提取 file_path,命中知识库 / harness / 工具文件才跑 linter,非阻塞反馈
+
+**linter 扩展到 10 项检查**:
+- `tools/check-architecture-consistency.py` 新增 `check_decision_tree_matrix_alignment()`(+150 行)
+- 检查逻辑:别名集合(code / label / 中文别名 / 括号内容)+ 子串匹配 + Normal 分支旁路 + `decision_tree_bypass: true` 显式旁路 + 反向检查(决策树里出现但 matrix 没有的 token)
+- 故障注入测试:临时加 `FAKE_SRC` 可检出;测试后回滚
+
+### Changed
+
+- `knowledge/matrix/matrix.yaml`:NFC source 新增 `decision_tree_bypass: true`(NFC 在 v2.1.0 加入但决策树尚未补入共存分支,显式声明旁路)
+- `docs/architecture/architecture.md`:"9 项自动检查" → "10 项自动检查"
+- `docs/architecture/development-plan.md`:同步 10 项描述
+
+### 覆盖度报告基线(matrix_coverage.py 首次跑)
+
+| 状态 | 数量 | 占比 |
+|------|:----:|:----:|
+| formal | 16 | 32.7% |
+| v0.9 | 13 | 26.5% |
+| stub | 20 | 40.8% |
+| missing | 0 | 0.0% |
+| **合计** | **49 mapping** | |
+
+- Tier P0:9/9 全 formal ✓
+- Tier P1:7 formal / 13 v0.9 / 13 stub(13 个 P1 stub 是 Sprint 3 主要盲点)
+- Tier P2:7/7 stub(低优先级,暂不填)
+- **案例孤儿**:0(所有 case file `sop_refs` 都指向已存在 SOP)
+
+### Infrastructure
+
+- **工时重估验证**:原估 Phase 3 Sprint 1 = 3-5 天;实际人力 75 min + Claude 墙钟 45 min(并行 3 Agent + 1 inline)
+- **并行方式 C 启用**:本次是"主会话 inline(C.1) + 3 Agent 并行(C.2/C.3/C.4)"的混合范式,4 任务真独立
+- **linter 自循环保护**:新增 hook 会在 Claude 下一次 Edit/Write 时立即跑 linter,非阻塞反馈到主会话;后续漂移秒级暴露
+
+---
+
 ## [2.2.0] — 2026-05-06
 
 ### 本版本里程碑
