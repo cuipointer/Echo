@@ -52,12 +52,20 @@ class ArchitectureChecker:
             is_stub = ("**状态**:**待编写**" in content
                        or "**状态**：待编写" in content
                        or "**待编写**" in content[:500])
+            # 判定是否为 v0.9 方法论版(比正式 SOP 允许更长,因含 EMC 案例反哺内容)
+            is_methodology = "方法论版" in content[:600]
 
             # 自适应行数阈值
             if is_stub:
                 # stub 模板大小:容忍 120-300
                 if lines < 120 or lines > 320:
                     self.warnings.append(f"{rel}: stub 行数异常 ({lines} 行),模板预期 120-300")
+            elif is_methodology:
+                # v0.9 方法论版:180-380(含案例启示 / 多章节 反哺)
+                if lines < 180:
+                    self.warnings.append(f"{rel}: 方法论版过短 ({lines} 行),建议 ≥ 200")
+                elif lines > 380:
+                    self.warnings.append(f"{rel}: 方法论版过长 ({lines} 行),建议精简到 ≤ 350")
             else:
                 # 正式 SOP:180-300
                 if lines < 180:
