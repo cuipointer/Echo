@@ -6,6 +6,55 @@ Echo·Desense 知识库与 harness 层的版本变更记录。
 
 ---
 
+## [2.1.0] — 2026-05-06
+
+### 本版本里程碑
+
+Phase 2 Sprint 1 交付完成。10 天 Sprint 压缩为约 5 天(并行执行方式 A+B)。
+
+### Added
+
+**EMC 2024 案例反哺落地**:
+- 新增 `knowledge/methodology/bandwidth-discrimination.md` v1.0(宽窄带判别独立方法论)
+- 新增 `knowledge/cases/O11-DDR-LLB-aperture.md`(从 EMC C.1 拆出的独立案例)
+- 新增 `knowledge/cases/O2-NFC-W24.md`(从 EMC B.2 拆出的独立案例)
+- matrix.yaml v2.1.0:新增 source `NFC`(category: 共存)+ mapping `NFC → W24 = W24-08` 和 `SHIELD_LEAK → W24 = W24-09`
+- source_codes 增加 `NF`;自动生成 W24-08 / W24-09 placeholder
+- SOP 模板新增**步骤 2.6 多源叠加排查法**(从 W24-02 v2.1 的 2.5 延伸)
+
+**P0 SOP 填充(v0.9 方法论版)**:
+- `knowledge/sops/LLB/LLB-07.md` — Charger → LTE LB(参照 LLB-04 + EMC A.3/C.1)
+- `knowledge/sops/W24/W24-03.md` — DDR → WiFi 2.4G(参照 W24-01 + EMC C.1/C.2)
+- `knowledge/sops/LHB/LHB-04.md` — USB 3.0 → LTE HB(参照 W5-04 + EMC O81)
+- 状态标记 `v0.9.0 方法论版(待现场复测)`,等待首次项目落地后升 v1.0
+
+**计划文档**:
+- `docs/phase2-sprint-plan.md` Sprint 1 计划 + 第九章并行执行方案(DAG/3 种并行方式/时间压缩)
+
+### Changed
+
+- `.claude/commands/diagnose.md` v2.0 → v2.1:Step 3 宽窄带判别引用独立方法论文档 + 自动判据速查表 + 反例提醒
+
+### Infrastructure
+
+- Week 1 所有变更集中在 `feature/echo-framework-feedback` 分支,分 3 个 commit 对应 T1.2/T1.3/T1.5
+- Week 2 每个 SOP 独立分支(`sop/llb-07` / `sop/w24-03` / `sop/lhb-04`),按 git-workflow 规范合入
+- develop 同步回 main 前完成加速 self-review(linter 0/0 + diff 扫描)
+
+### 指标达成
+
+| 指标 | v2.0.0 | v2.1.0 | 目标 |
+|---|:---:|:---:|:---:|
+| Formal SOP 数 | 13 | **16** | 16 ✓ |
+| 案例库 | 2 | **4** | 4 ✓ |
+| matrix.yaml sources | 15 | **16** | 16+ ✓ |
+| matrix.yaml mappings | 47 | **49** | 49+ ✓ |
+| 方法论文档 | 4 | **5** | 5 ✓ |
+| `/diagnose` 版本 | v2.0 | **v2.1** | v2.1 ✓ |
+| linter 状态 | 0/0 | **0/0** | 0/0 ✓ |
+
+---
+
 ## [2.0.0] — 2026-04-27
 
 ### Added
