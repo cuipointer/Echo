@@ -71,7 +71,7 @@
 
 ## 开发计划
 
-详见 [开发计划](docs/development-plan.md)
+详见 [开发计划](docs/architecture/development-plan.md)
 
 ## 许可证
 

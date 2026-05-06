@@ -523,4 +523,4 @@ reviewers: [射频天线项目接口人]
 - 原始数据:[22~24年EMC案例总结](https://mi.feishu.cn/sheets/VXwJs8x6vhr77OtaSFocPGAOnId?sheet=0L66Vr)
 - Echo 方法论:[knowledge/methodology/three-elements.md](../methodology/three-elements.md)
 - 当前矩阵:[knowledge/matrix/matrix.yaml](../matrix/matrix.yaml)
-- 工作流:[docs/git-workflow.md](../../docs/git-workflow.md)
+- 工作流:[docs/git-workflow.md](../../docs/guides/git-workflow.md)
