@@ -1,50 +1,45 @@
 # Echo·Desense 架构与工作流
 
-**当前版本**:v2.1.0(2026-05-06 Sprint 1 完成)
+**当前版本**:v2.3.0(2026-05-06 Phase 3 Sprint 1 完成)
 
-## 1. 系统架构：多 Agent 协作
+## 1. 系统架构:多 Agent 协作
 
 ```mermaid
 flowchart TB
-    User([工程师自然语言输入<br/>"RC 场景 WiFi 2.4G 灵敏度恶化 5dB"])
+    User(["工程师自然语言输入<br/>RC 场景 WiFi 2.4G 灵敏度恶化 5dB"])
 
-    subgraph Harness["Claude Code / Claude Agent SDK"]
-        direction TB
-        Skills["Skills (自动触发)"]
-        Commands["Slash Commands (工作流)"]
-        Subagent["Subagent (人格/上下文隔离)"]
+    subgraph SK["Skills 层 (自动触发)"]
+        DD["diagnose-desense<br/>意图识别"]
+        HC["harmonic-calc<br/>谐波命中计算"]
+        SE["sop-executor<br/>SOP 引导"]
+        EL["engineering-logger<br/>日志归档"]
+        C2S["case-to-sop<br/>v2.3 新增"]
     end
 
-    subgraph SK["Skills 层"]
-        DD[diagnose-desense<br/>意图识别]
-        HC[harmonic-calc<br/>谐波命中计算]
-        SE[sop-executor<br/>SOP 引导]
-        EL[engineering-logger<br/>日志归档]
-    end
-
-    subgraph CMD["Commands 层"]
-        Diag["/diagnose<br/>诊断主流程"]
+    subgraph CMD["Commands 层 (工作流)"]
+        Diag["/diagnose v2.1<br/>诊断主流程"]
         Mat["/matrix<br/>矩阵查表"]
         Form["/formal<br/>正式报告"]
         Play["/playground<br/>临时调试"]
     end
 
     subgraph AG["Subagent 层"]
-        Echo["echo<br/>Desense 专家人格<br/>三要素 + 四原则"]
+        Echo["echo<br/>Desense 专家人格<br/>三要素 + 四条原则"]
     end
 
-    subgraph KB["知识库 (83 文档)"]
-        Meth[methodology/<br/>方法论 5 篇]
-        Mtx[matrix/<br/>matrix.yaml + 3 视图<br/>16 源 × 7 体 × 49 映射]
-        SOPs[sops/<br/>43 个 SOP<br/>17 正式 + 26 stub]
-        Case[cases/<br/>4 个闭环案例]
+    subgraph KB["知识库"]
+        Meth["methodology/<br/>方法论 5 篇"]
+        Mtx["matrix/<br/>matrix.yaml<br/>16 源 × 7 体 × 49 映射"]
+        SOPs["sops/<br/>43 SOP 文件<br/>14 正式 + 11 方法论版 + 18 占位"]
+        Case["cases/<br/>11 个闭环案例"]
     end
 
-    subgraph Tools["Python / Shell 工具"]
-        HCpy[harmonic_calc.py]
-        LB[link_budget.py]
-        Chk[check-architecture<br/>-consistency.py]
-        Log[logger.py]
+    subgraph Tools["工具 + 自动化 (16 脚本)"]
+        HCpy["harmonic_calc.py"]
+        MC["matrix_coverage.py<br/>v2.3 新增"]
+        CTS["case_to_sop.py<br/>v2.3 新增"]
+        Chk["check-architecture<br/>-consistency.py<br/>10 项 linter"]
+        Hook["linter_hook.sh<br/>PostToolUse v2.3"]
     end
 
     User --> DD
@@ -57,11 +52,14 @@ flowchart TB
     SOPs --> SE
     SE --> User
     User --> EL
-    EL --> Log
     User --> Form
     Form --> Case
+    Case --> C2S
+    C2S --> SOPs
     Echo -.读.-> Meth
     Mat -.读.-> Mtx
+    Chk -.守护.-> KB
+    Hook -.触发.-> Chk
 ```
 
 ## 2. 核心链路：一次 Desense 诊断的长链推理
@@ -70,29 +68,28 @@ flowchart TB
 sequenceDiagram
     autonumber
     participant U as 工程师
-    participant S as diagnose-desense<br/>(Skill)
-    participant E as echo<br/>(Subagent)
-    participant D as /diagnose<br/>(Command)
-    participant M as /matrix
+    participant S as diagnose-desense
+    participant E as echo subagent
+    participant D as diagnose 命令
+    participant M as matrix 命令
     participant H as harmonic-calc
     participant X as sop-executor
     participant L as engineering-logger
 
-    U->>S: "RC 场景 WiFi24 恶化 5dB"
-    Note over S: 意图识别:<br/>受扰频段 + 场景 + 幅度
+    U->>S: RC 场景 WiFi 2.4G 恶化 5dB
+    Note over S: 意图识别 (受扰频段 + 场景 + 幅度)
     S->>E: 注入 Desense 专家上下文
-    E->>D: 调用诊断主流程
+    E->>D: 调用 /diagnose v2.1
 
-    Note over D: Step1 Normal 优先判定
-    D->>U: "Normal Desense 测过吗?"
-    U-->>D: "Normal ≤ 1dB"
+    Note over D: Step 1-2 参数解析 + Normal 优先
+    D->>U: Normal Desense 测过吗
+    U-->>D: Normal ≤ 1 dB
 
-    Note over D: Step2 宽窄带判别 (v2.1)
-    D->>D: 单频 ≥10dB → 窄带谐波<br/>平坦度 ≥3dB → 宽带平台<br/>随 MIPI → FPC/BTB 辐射<br/>场景激活 → 共存/模块自身
+    Note over D: Step 3 宽窄带判别 (v2.1)<br/>单频 ≥10dB 窄带 / 平坦度 ≥3dB 宽带<br/>随 MIPI FPC / 场景激活 多源叠加
 
-    Note over D: Step3 决策树收敛
-    D->>M: 干扰源×受扰体 查表
-    M-->>D: 返回 SOP 编号 W24-02
+    Note over D: Step 4 决策树 + 矩阵
+    D->>M: 干扰源 × 受扰体 查表
+    M-->>D: 返回 SOP 编号
 
     opt 窄带命中
         D->>H: 基频 × 谐波次数
@@ -104,7 +101,8 @@ sequenceDiagram
     U-->>X: 测量数据回传
     X-->>E: 生成三要素结论
 
-    E-->>U: 输出干扰源/受扰体/<br/>耦合路径 + 改善措施
+    Note over E: Step 5-6 三要素 + 分层动作路由
+    E-->>U: 干扰源 / 受扰体 / 耦合路径 + 改善措施
 
     U->>L: 任务完成
     L->>L: 写入 logs/daily/YYYY-MM-DD.md
@@ -120,28 +118,30 @@ sequenceDiagram
 | **知识库** | 文档即配置 | 工程师可直接维护，无需改代码 |
 | **Tools** | Python 脚本兜底计算 | 谐波命中、链路预算等精确运算 |
 
-## 4. 项目数据(v2.1.0,2026-05-06 更新)
+## 4. 项目数据(v2.3.0,2026-05-06 更新)
 
 - Slash Commands: **4** (`/diagnose` v2.1 / `/matrix` / `/formal` / `/playground`)
-- Skills: **4** (diagnose-desense / harmonic-calc / sop-executor / engineering-logger)
+- Skills: **5** (diagnose-desense / harmonic-calc / sop-executor / engineering-logger / **case-to-sop** v2.3)
 - Subagents: **1** (echo,四条工作原则:Normal 优先 / 软件优先 / 设计查阅 / **宽窄带判别**)
 - 方法论文档: **5** 篇(三要素 / Normal 优先 / 软件优先 / 设计查阅 / **宽窄带判别 v1.0**)
-- 标准化 SOP: **43**(**17 正式** + 26 stub,覆盖 W24/W5/GL1/GL5/LHB/LLB/Normal 七大频段族)
-  - Phase 2 Sprint 1 新增:LLB-07(Charger)/ W24-03(DDR)/ LHB-04(USB3)/ W24-08(NFC)/ W24-09(SHIELD)
+- 标准化 SOP: **43 文件 / 49 映射**(**14 正式 + 11 方法论版(v0.9)+ 18 占位**,覆盖 W24/W5/GL1/GL5/LHB/LLB/NORMAL 七大频段族)
+  - Sprint 1(v2.1):LLB-07 / W24-03 / LHB-04 v0.9
+  - Sprint 2(v2.2):W24-08 / W24-09 / W5-01 / LHB-01 / LHB-03 / LLB-03 / GL1-03 / GL1-04 v0.9
 - 矩阵:**16 源 × 7 受扰体 × 49 映射**(单一真相源 `matrix.yaml` v2.1.0)
-- 案例库:**4 个闭环案例**(AS2-RC-WiFi24-OIS / EMC-2024-triage / O11-DDR-LLB-aperture / O2-NFC-W24)
-- 知识库文档总量:**83 篇 / 14,247 行** + `.claude/` harness 层 9 个 md + `docs/` 8 篇
-- 工具脚本:**12** 个(Python + Shell,含 matrix 生成器 / SOP stub 生成器 / 一致性 linter)
-- 已归档工作日志:**5+** 篇
-- Git:10+ 次结构化 commit,2 个 tag(`v2.0.0` Phase 1 / `v2.1.0` Phase 2 Sprint 1)
+- 案例库:**11 个闭环案例**(AS2-RC / EMC-2024-triage / O11-DDR-LLB / O2-NFC-W24 + Sprint 2 拆出 7 个 EMC 案例)
+- 方法论创新(v2.1 ~ v2.3):一案多 SOP 模式 / 步骤 2.6 多源叠加排查法 5 子节 / 双案例对比表 / GPS 特殊性专节(3 dB 即严重 + 3 周时间护栏)
+- 自动化基建(v2.3):PostToolUse hook / case→SOP skill / 矩阵覆盖度报告 / **10 项** linter
+- 工具脚本:**16** 个(Python + Shell,含 matrix 生成器 / SOP stub 生成器 / 一致性 linter / 覆盖度报告 / 案例→SOP 规划)
+- Git:**4 个 tag**(`v2.0.0` Phase 1 / `v2.1.0` Sprint 1 / `v2.2.0` Sprint 2 / `v2.3.0` Phase 3 Sprint 1)
 - 远端:GitHub `cuipointer/Echo`
+- 治理指标:Linter 0/0 跨 4 tag / 知识漂移 0 次/月 / 案例孤儿 0
 
 ## 5. 为什么选 Claude Agent SDK
 
 1. **原生支持多 Agent 协作**：Subagent 机制天然契合"专家人格 + 工作流"解耦
 2. **Skill 自动触发**：无需显式调用，工程师用自然语言就能进入标准流程
 3. **文档即配置**：`.md` 即可定义 agent/command/skill，团队维护门槛极低
-4. **长上下文 + 文件系统记忆**：14K+ 行知识库可随时索引，不受单次对话窗口限制
+4. **长上下文 + 文件系统记忆**：17K+ 行知识库可随时索引，不受单次对话窗口限制
 
 ## 6. 单一真相源架构(v2.1.0 固化)
 
